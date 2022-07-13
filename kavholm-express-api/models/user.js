@@ -4,7 +4,8 @@ const db = require("../db")
 const { BadRequestError, UnauthorizedError } = require("../utils/errors")
 
 class User {
-  static makePublicUser(user) {
+
+  static async makePublicUser(user) {
     return {
       id: user.id,
       email: user.email,
@@ -77,7 +78,7 @@ class User {
     )
     const user = userResult.rows[0]
 
-    return user
+    return User.makePublicUser(user);
   }
 
   static async fetchUserByEmail(email) {
