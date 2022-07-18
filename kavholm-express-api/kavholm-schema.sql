@@ -26,10 +26,10 @@ CREATE TABLE listings (
 
 CREATE TABLE bookings (
   id             SERIAL PRIMARY KEY,  
-  payment_method TEXT NOT NULL,
+  payment_method TEXT NOT NULL DEFAULT 'card',
   start_date     TIMESTAMP NOT NULL,
   end_date       TIMESTAMP NOT NULL,
-  guests         INTEGER NOT NULL,
+  guests         INTEGER NOT NULL DEFAULT 1,
   total_cost     BIGINT NOT NULL,
   listing_id     INTEGER NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
   user_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

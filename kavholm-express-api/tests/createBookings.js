@@ -30,7 +30,7 @@ const createBookings = async (userIds, listingIds) => {
     [listingId]
   )
 
-  const listing = listingResults.rows[0]
+  const listing = await listingResults.rows[0];
 
   const firstBooking = {
     startDate: "03-05-2021",

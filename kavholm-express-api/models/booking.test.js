@@ -1,6 +1,7 @@
 const { BadRequestError } = require("../utils/errors")
 const Listing = require("./listing")
 const Booking = require("./booking")
+const { createBookings } = require('../tests/createBookings')
 const {
   commonBeforeAll,
   commonBeforeEach,
@@ -15,6 +16,53 @@ afterEach(commonAfterEach)
 afterAll(commonAfterAll)
 
 describe("Booking", () => {
+
+
+  describe("Test createBooking", () => {
+    test("Can create a new booking with valid params", async () => {
+      const user = { username: "jlo" }
+      const listingId = testListingIds[0];
+      const listing = await Listing.fetchListingById(listingId)
+      const newBooking = {
+        startDate: "07-18-2022",
+        endDate: "08-18-2022",
+        guests: 3
+      }
+
+      const booking = await Booking.createBooking({ newBooking, listing, user })
+
+      expect(booking).toEqual({
+        id: expect.any(Number),
+        startDate: new Date("07-18-2022"),
+        endDate: new Date("08-18-2022"),
+        paymentMethod: "card",
+        totalCost: expect.any(String),
+        hostUsername: "lebron",
+        guests: 3,
+        listingId: listingId,
+        username: "jlo",
+        userId: expect.any(Number),
+        createdAt: expect.any(Date),
+      })
+    })
+
+    test("Throws error with invalid params", async () => {
+      expect.assertions(1)
+      const user = { username: "jlo" }
+      const listingId = testListingIds[0];
+      const listing = await Listing.fetchListingById(listingId)
+      const newBooking = { endDate: "08-18-2022" }
+      try {
+        await Booking.createBooking({ newBooking, listing, user })
+      }
+      catch(error) {
+        expect(error instanceof BadRequestError).toBeTruthy()
+      }
+    })
+  })
+
+
+
   describe("Test listBookingsFromUser", () => {
     test("Fetches all of the authenticated users' bookings", async () => {
       const user = { username: "jlo" }

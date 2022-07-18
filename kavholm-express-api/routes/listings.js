@@ -6,7 +6,7 @@ const router = express.Router()
 router.post("/", security.requireAuthenticatedUser, async function (req, res, next) {
   try {
     const user = res.locals.user
-    console.log("req.body = ", req.body)
+    // console.log("req.body = ", req.body)
     const listing = await Listing.createListing({ newListing: req.body.newListing, user })
     return res.status(201).json({ listing })
   } catch (err) {
